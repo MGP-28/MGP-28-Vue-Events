@@ -1,7 +1,10 @@
-<script setup>
+<script>
+import MgpUserGrid from './components/mgp-user-grid.vue';
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from "./components/HelloWorld.vue";
+export default {
+  components: {MgpUserGrid}
+}
 </script>
 
 <template>
@@ -10,7 +13,7 @@ import HelloWorld from "./components/HelloWorld.vue";
       <a href="https://vitejs.dev" target="_blank">Vite</a>
       <a href="https://vuejs.org/" target="_blank">Vue</a>
     </div>
-    <HelloWorld msg="Vite + Vue" />
+    <MgpUserGrid></MgpUserGrid>
   </div>
 </template>
 
