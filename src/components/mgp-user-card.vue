@@ -20,64 +20,58 @@
                     <h1>{{this.user.country}}</h1>
                 </li>
             </ul>
+            <button @click="alertUserName">Alert!</button>
         </div>
+    <MgpPopupText 
+        :text="this.getName" 
+        v-if="alertIsOpen" 
+        @alert-closed="this.alertIsOpen = false">
+    </MgpPopupText>
     </div>
 </template>
 
 <script>
     import User from '../models/user'
+    import MgpPopupText from './mgp-popup-text.vue'
     export default {
-        name: "MgpUserCard",
-        props:{
-            user: User
-        },
-        computed: {
-            getPhoto(){
-                return this.user.picture
-            },
-            getName(){
-                return `${this.user.firstName} ${this.user.lastName}`
-            },
-            getClassByGender(){
-                return (this.user.gender == 'female') ? 'female' : null
-            }
-        },
-        beforeCreate(){
-
-        },
-        created(){
-
-        },
-        beforeMount(){
-
-        },
-        mounted(){
-
-        },
-        beforeUpdate(){
-
-        },
-        updated(){
-
-        },
-        beforeUnmount(){
-
-        },
-        unmounted(){
-
+    name: "MgpUserCard",
+    props: {
+        user: User
+    },
+    data() {
+        return{
+            alertIsOpen: false
         }
-    }
+    },
+    computed: {
+        getPhoto() {
+            return this.user.picture;
+        },
+        getName() {
+            return `${this.user.firstName} ${this.user.lastName}`;
+        },
+        getClassByGender() {
+            return (this.user.gender == "female") ? "female" : null;
+        }
+    },
+    methods: {
+        alertUserName: function () {
+            this.alertIsOpen = true;
+        }
+    },
+    components: { MgpPopupText }
+}
 </script>
 
 <style scoped>
-    :root{
-        --glowColor: blue;
-    }
     .cardContainer{
+        position: relative;
         width: 400px;
         padding: 30px;
         border: solid 0.5px;
         box-sizing: border-box;
+        border-radius: 15px;
+        box-shadow: black 0 0 10px 2px;
     }
     @keyframes pulsing{
         from{ box-shadow: 0 0 10px 1px; }
@@ -112,5 +106,11 @@
     h1{
         font-size: 1rem;
         overflow-x: auto;
+    }
+    button{
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        border: solid 0.5px;
     }
 </style>
