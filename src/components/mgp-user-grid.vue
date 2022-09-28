@@ -4,6 +4,13 @@
             <button @click="showLastSelected">Show last selected user</button>
             <MgpUserSelectedTotal :selectedUserTotal="selectedUsersCounter" />
         </div>
+        <div>
+            <MgpSelectedUserList 
+                v-if="selectedUserList.length > 0" 
+                :users="selectedUserList" 
+                @toggle-user-in-selected-list="toggleUserInList"
+            />
+        </div>
         <div v-if="userList.length == 0">
             Loading users...
         </div>
@@ -11,8 +18,9 @@
             <MgpUserCard
                 v-for="(user, idx) in userList" 
                 :user="user" 
-                @user-selected = "userSelected" >
-            </MgpUserCard>
+                @user-selected = "userSelected(idx)" 
+                @user-in-list-toggled = "this.toggleUserInList(user)"
+            />
         </div>
         <MgpUserSelected 
             v-if="showingSelectedUser" 
@@ -27,12 +35,15 @@ import { getRandomUsers } from '../services/getUser';
 import MgpUserCard from './mgp-user-card.vue';
 import MgpUserSelected from './mgp-user-selected.vue';
 import MgpUserSelectedTotal from './mgp-user-selected-total.vue';
+import MgpPopupText from './mgp-popup-text.vue';
+import MgpSelectedUserList from './mgp-selected-user-list.vue';
 
     export default {
     name: "MgpUserGrid",
     data() {
         return {
             userList: [],
+            selectedUserList: [],
             lastUserIndex: null,
             showingSelectedUser: false,
             selectedUsersCounter: 0
@@ -45,12 +56,17 @@ import MgpUserSelectedTotal from './mgp-user-selected-total.vue';
         userSelected: function (idx){
             this.lastUserIndex = idx;
             this.selectedUsersCounter++
+        },
+        toggleUserInList: function (user){
+            const idx = this.selectedUserList.indexOf(user)
+            if(idx >= 0) this.selectedUserList.splice(idx)
+            else this.selectedUserList.push(user)
         }
     },
     async created() {
         this.userList = await getRandomUsers(9)
     },
-    components: { MgpUserCard, MgpUserSelected, MgpUserSelectedTotal }
+    components: { MgpUserCard, MgpUserSelected, MgpUserSelectedTotal, MgpPopupText, MgpSelectedUserList }
 }
 </script>
 

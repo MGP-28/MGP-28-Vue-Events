@@ -8,6 +8,10 @@ class User{
         this.gender = gender
         this.picture = picture
     }
+    
+    getName(){
+        return `${this.firstName} ${this.lastName}`
+    }
 }
 
 export default User
