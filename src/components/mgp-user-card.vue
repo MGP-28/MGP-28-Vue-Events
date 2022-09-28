@@ -20,7 +20,7 @@
                     <h1>{{this.user.country}}</h1>
                 </li>
             </ul>
-            <button @click="alertUserName">Alert!</button>
+            <button v-if="hasAlert" @click="alertUserName">Alert!</button>
         </div>
     <MgpPopupText 
         :text="this.getName" 
@@ -36,7 +36,10 @@
     export default {
     name: "MgpUserCard",
     props: {
-        user: User
+        user: User,
+        hasAlert: {
+            default: true
+        }
     },
     data() {
         return{
@@ -57,6 +60,7 @@
     methods: {
         alertUserName: function () {
             this.alertIsOpen = true;
+            this.$emit('user-selected')
         }
     },
     components: { MgpPopupText }

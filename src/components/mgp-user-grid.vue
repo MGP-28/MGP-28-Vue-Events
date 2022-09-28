@@ -1,7 +1,8 @@
 <template>
     <div class="content-container">
-        <div>
-            <button @click="">Show last selected user</button>
+        <div class="top-buttons" v-if="lastUserIndex !== null">
+            <button @click="showLastSelected">Show last selected user</button>
+            <MgpUserSelectedTotal :selectedUserTotal="selectedUsersCounter" />
         </div>
         <div v-if="userList.length == 0">
             Loading users...
@@ -10,28 +11,46 @@
             <MgpUserCard
                 v-for="(user, idx) in userList" 
                 :user="user" 
-                @user-selected="this.lastUserIndex = idx" >
+                @user-selected = "userSelected" >
             </MgpUserCard>
         </div>
+        <MgpUserSelected 
+            v-if="showingSelectedUser" 
+            :user="userList[lastUserIndex]"
+            @user-selected-window-closed = "this.showingSelectedUser = false;" >
+        </MgpUserSelected>
     </div>
 </template>
 
 <script>
-    import { getRandomUsers } from '../services/getUser';
-    import MgpUserCard from './mgp-user-card.vue';
+import { getRandomUsers } from '../services/getUser';
+import MgpUserCard from './mgp-user-card.vue';
+import MgpUserSelected from './mgp-user-selected.vue';
+import MgpUserSelectedTotal from './mgp-user-selected-total.vue';
 
     export default {
     name: "MgpUserGrid",
     data() {
         return {
             userList: [],
-            lastUserIndex: null
+            lastUserIndex: null,
+            showingSelectedUser: false,
+            selectedUsersCounter: 0
         };
+    },
+    methods:{
+        showLastSelected: function () {
+            this.showingSelectedUser = true
+        },
+        userSelected: function (idx){
+            this.lastUserIndex = idx;
+            this.selectedUsersCounter++
+        }
     },
     async created() {
         this.userList = await getRandomUsers(9)
     },
-    components: { MgpUserCard }
+    components: { MgpUserCard, MgpUserSelected, MgpUserSelectedTotal }
 }
 </script>
 
@@ -39,6 +58,11 @@
 .content-container{
     display: flex;
     flex-direction: column;
+    gap: 20px;
+}
+.top-buttons{
+    display: flex;
+    justify-content: center;
     gap: 20px;
 }
 .user-list{
