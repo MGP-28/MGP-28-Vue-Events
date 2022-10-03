@@ -59,7 +59,7 @@ import MgpSelectedUserList from './mgp-selected-user-list.vue';
         },
         toggleUserInList: function (user){
             const idx = this.selectedUserList.indexOf(user)
-            if(idx >= 0) this.selectedUserList.splice(idx)
+            if(idx >= 0) this.selectedUserList.splice(idx, 1)
             else this.selectedUserList.push(user)
         }
     },
